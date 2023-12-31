@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  database:
+    image: 'mysql'
+    container_name: 'mysqldb'
+    # Volumes for data persistence
+    volumes:
+      - ./database/mysql-data:/var/lib/mysql
+    # Uncomment the following lines if you want to specify environment variables directly
+    # environment:
+    #   - MYSQL_ROOT_PASSWORD=root
+    #   - MYSQL_ROOT_USER=root
+    # Using an env file instead of hard-coding in the compose file
+    env_file: ./env/mysql.env
+    networks:
+      - spring-net
+    ports:
+      - 3306:3306
+
+  backend:
+    # Building image using compose
+    build:
+      context: ./backend/Ecommerce
+      # Dockerfile: Dockerfile -- we don't need this line since the name of the Dockerfile is as it is
+    image: 'springmart' # Specify the name of the image
+    container_name: 'spring-cont'
+    networks:
+      - spring-net
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+
+networks:
+  spring-net:
