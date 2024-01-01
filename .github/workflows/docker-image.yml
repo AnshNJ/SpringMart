@@ -20,8 +20,7 @@ jobs:
           MYSQL_PASSWORD: ${{ secrets.MYSQLPASS}}
         ports:
           - 3306:3306
-        container_name: mysqldb
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --name=mysqldb --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
     - name: Checkout code
