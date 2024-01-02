@@ -18,8 +18,12 @@ jobs:
           MYSQL_ROOT_USER: root
           MYSQL_DATABASE: ecommerce
         ports:
-          - 3307:3306 #3306 is occupied by our original container
+          - 3307:3306 # 3306 is occupied by our original container
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
 
   Test_app:
     runs-on: ubuntu-latest
@@ -36,10 +40,10 @@ jobs:
         password: ${{ secrets.DOCKERPASS }}
 
     - name: Build Docker images
-      run: docker compose -f docker-compose.yaml build
+      run: docker-compose -f docker-compose.yaml build
     
     - name: Run Tests
-      run: docker compose -f docker-compose.yaml up --abort-on-container-exit --exit-code-from backend
+      run: docker-compose -f docker-compose.yaml up --abort-on-container-exit --exit-code-from backend
 
     - name: Push Docker images to Docker Hub
-      run: docker compose -f docker-compose.yaml push
+      run: docker-compose -f docker-compose.yaml push
