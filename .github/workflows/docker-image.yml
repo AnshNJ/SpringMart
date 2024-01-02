@@ -34,7 +34,7 @@ jobs:
       run: docker compose -f docker-compose.yaml build
 
     - name: Run tests
-      run: docker compose -f docker-compose.yaml up -d --abort-on-container-exit --exit-code-from backend
+      run: docker compose -f docker-compose.yaml up --abort-on-container-exit --exit-code-from backend
 
     - name: Cleanup on failure
       if: failure()
