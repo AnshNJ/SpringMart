@@ -34,12 +34,15 @@ jobs:
     - name: Build Docker images
       run: docker compose -f docker-compose.yaml build
 
-    - name: Wait for MySQL to be ready
+    - name: Wait for MySQL to be healthy
       run: |
-        while ! docker exec -i mysqldb mysqladmin ping --silent; do
-          echo "Waiting for MySQL to be ready..."
-          sleep 1
+        timeout=300
+        while [ $timeout -gt 0 ]; do
+          docker inspect --format='{{.State.Health.Status}}' mysqldb | grep -q 'healthy' && break
+          sleep 5
+          ((timeout-=5))
         done
+        [ $timeout -gt 0 ]
 
     - name: Run tests
       run: docker compose -f docker-compose.yaml up --abort-on-container-exit --exit-code-from backend
