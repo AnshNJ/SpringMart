@@ -18,6 +18,8 @@ jobs:
           MYSQL_DATABASE: ecommerce
         ports:
           - 3307:3306 #3306 is occupied by our original container
+        volumes:
+          - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
