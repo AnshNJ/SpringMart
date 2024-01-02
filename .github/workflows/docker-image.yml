@@ -33,9 +33,12 @@ jobs:
 
     - name: Build Docker images
       run: docker compose -f docker-compose.yaml build
+    
+    - name: Run database
+      run: docker compose -f docker-compose.yaml database up --abort-on-container-exit --exit-code-from backend
 
-    - name: Run tests
-      run: docker compose -f docker-compose.yaml up --abort-on-container-exit --exit-code-from backend
+    - name: Run Springboot
+      run: docker compose -f docker-compose.yaml backend up --abort-on-container-exit --exit-code-from backend
 
     - name: Push Docker images to Docker Hub
       run: docker compose -f docker-compose.yaml push
