@@ -18,8 +18,6 @@ jobs:
           MYSQL_DATABASE: ecommerce
         ports:
           - 3307:3306 #3306 is occupied by our original container
-        volumes:
-          - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
@@ -37,6 +35,9 @@ jobs:
 
     - name: Run tests
       run: docker compose -f docker-compose.yaml up -d --abort-on-container-exit --exit-code-from backend
+
+    - name: Fetch MySQL logs
+      run: docker logs mysqldb
 
     - name: Push Docker images to Docker Hub
       run: docker compose -f docker-compose.yaml push
