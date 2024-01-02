@@ -6,16 +6,19 @@ services:
     # Volumes for data persistence
     volumes:
       - ./database/mysql-data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     # Uncomment the following lines if you want to specify environment variables directly
-    # environment:
-    #   - MYSQL_ROOT_PASSWORD=root
-    #   - MYSQL_ROOT_USER=root
-    # Using an env file instead of hard-coding in the compose file
-    env_file: ./env/mysql.env
+    environment:
+      - MYSQL_DATABASE=ecommerce
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_USER=root
+   # Using an env file instead of hard-coding in the compose file
+    command: ["--init-file", "/docker-entrypoint-initdb.d/init.sql"]
     networks:
       - spring-net
     ports:
       - 3306:3306
+
 
   backend:
     # Building image using compose
