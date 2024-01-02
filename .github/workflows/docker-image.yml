@@ -34,10 +34,10 @@ jobs:
       run: docker compose -f docker-compose.yaml build
 
     - name: Run tests
-      run: docker compose -f docker-compose.yaml up --abort-on-container-exit --exit-code-from backend
+      run: docker compose -f docker-compose.yaml up 
 
     - name: Fetch MySQL logs
-      run: docker logs mysqldb
+      run: docker logs mysqldb --abort-on-container-exit --exit-code-from backend
 
     - name: Push Docker images to Docker Hub
       run: docker compose -f docker-compose.yaml push
